@@ -4,7 +4,7 @@
   <title><![CDATA[Lifetime blog]]></title>
   <link href="http://yoihito.github.io/atom.xml" rel="self"/>
   <link href="http://yoihito.github.io/"/>
-  <updated>2015-03-16T19:06:51+03:00</updated>
+  <updated>2015-03-16T19:33:29+03:00</updated>
   <id>http://yoihito.github.io/</id>
   <author>
     <name><![CDATA[Vadim Gribanov]]></name>
@@ -309,7 +309,7 @@ It has such features as fingerprinting, assets concantenation, assets compession
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[На чем основан JOIN в реляционных СУБД и в PostgreSQL в частности]]></title>
+    <title type="html"><![CDATA[Как работают JOIN в реляционных СУБД]]></title>
     <link href="http://yoihito.github.io/blog/2015/02/12/how-do-joins-is-implemented-in-rdbmses-and-in-postgresql-particularly/"/>
     <updated>2015-02-12T16:18:55+03:00</updated>
     <id>http://yoihito.github.io/blog/2015/02/12/how-do-joins-is-implemented-in-rdbmses-and-in-postgresql-particularly</id>
@@ -321,6 +321,9 @@ It has such features as fingerprinting, assets concantenation, assets compession
 
 <h2>Загадочная история JOIN-a Баттона</h2>
 
+<p>Оказывается за командой join скрывается несколько различных методов. Каждый из них выбирается планировщиком на этап построения запроса.
+Всего таких методов 3:</p>
+
 <ul>
 <li>Merge join</li>
 <li>Hash join</li>
@@ -328,12 +331,29 @@ It has such features as fingerprinting, assets concantenation, assets compession
 </ul>
 
 
+<h3>Merge join</h3>
+
+<p>Сначала сортируются все записи по значениям колонок которые будут объединяться. Затем проходом по обеим таблицам совпадающие записи объединяются.
+Метод хорошо тем, что проход по всем записями осуществляется один раз.
+Вот такой пример с сайта <a href="http://use-the-index-luke.com.">http://use-the-index-luke.com.</a></p>
+
+<p><img src="http://use-the-index-luke.com/img/sort-merge.asvg" alt="Merge join" /></p>
+
+<h3>Hash join</h3>
+
+<p>Первая таблица записывается в хэш-таблицу с ключем в виде атрибута по которому будут объединяться обе таблицы.
+Затем проходом по второй таблице значения из неё сопостовляются со значениями из хэш-таблицы.</p>
+
+<h3>Nested loop</h3>
+
+<p>Каждому значению из первой таблицы, сопоставляется значение из второй таблицы. Если они равны то объединяются. Очень проста в реализации, но очень затратная метод.</p>
+
 <h2>Заключение</h2>
 
-<p>Таким образом мы выяснили каким образом реализован JOIN в реляционных СУБД.<br/>
-Самый быстрый и оптимальный это Merge join<br/>
-За ним следует Hash join, он хорош в случае когда одна из таблиц имеет мало записей.<br/>
-И черепашка Nested loop, основанный на простом проходе циклами по таблицам и сравнении ключей</p>
+<p>Таким образом мы выяснили каким образом реализован JOIN в реляционных СУБД.
+Самый быстрый и оптимальный это Merge join
+За ним следует Hash join, он хорош в случае когда одна из таблиц имеет мало записей.
+И черепашка Nested loop, основанный на простом проходе циклами по таблицам и сравнении ключей.</p>
 ]]></content>
   </entry>
   
