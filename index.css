@@ -1,0 +1,19 @@
+.avatar {
+  width: 150px;
+  height: 150px;
+  border-radius: 5px;
+}
+
+.content {
+  max-width: 600px;
+}
+
+.column {
+  display: inline-block;
+  vertical-align:top;
+  margin-right: 1em;
+}
+
+p {
+  font-family: 'Open Sans', sans-serif;
+}
